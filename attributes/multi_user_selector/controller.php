@@ -45,7 +45,7 @@ class Controller extends CoreController
 
 		$us = Core::make('helper/form/user_selector');
 
-		echo $us->selectUser($this->field('value'), array_shift($values));
+		echo $us->selectMultipleUsers($this->field('value'), $values);
 	}
 
 	protected function load()
