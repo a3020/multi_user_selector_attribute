@@ -45,7 +45,9 @@ class Controller extends CoreController
 
 		$us = Core::make('helper/form/user_selector');
 
-		echo $us->selectMultipleUsers($this->field('value'), $values);
+		// Hack to get the user search dialog working in composer
+		echo $us->selectMultipleUsers($this->field('value'), $values) .
+			'<script>$.fn.dialog.activateDialogContents($(".form-group"));</script>';
 	}
 
 	protected function load()
