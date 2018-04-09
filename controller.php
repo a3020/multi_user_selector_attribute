@@ -8,7 +8,7 @@ use Concrete\Core\Attribute\Type as AttributeType;
 class Controller extends Package
 {
     protected $pkgHandle = 'multi_user_selector_attribute';
-    protected $appVersionRequired = '5.7.5';
+    protected $appVersionRequired = '8.0';
     protected $pkgVersion = '0.9.1';
 
     public function getPackageName()
