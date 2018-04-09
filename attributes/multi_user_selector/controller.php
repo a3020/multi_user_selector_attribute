@@ -17,9 +17,12 @@ class Controller extends CoreController
 		return trim($value);
 	}
 
-	public function getValue() : array
+    /**
+     * @return array
+     */
+    public function getValue()
 	{
-		$value = $this->getRawValue() ?? "";
+		$value = $this->getRawValue();
 		$users = [];
 
 		$ids = explode(',', $value);
