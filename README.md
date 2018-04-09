@@ -1,4 +1,4 @@
-# Multiple user selector attribute type for 
+# Multiple user selector attribute type 
 
 Requirements: 
 - concrete5 8+
