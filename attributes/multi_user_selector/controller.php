@@ -28,7 +28,7 @@ class Controller extends CoreController
 		$ids = explode(',', $value);
 
 		foreach ($ids as $uID) {
-			$ui = Core::make(\Concrete\Core\User\UserInfoFactory::class)->getByID($uID);
+			$ui = Core::make(\Concrete\Core\User\UserInfoRepository::class)->getByID($uID);
 			if ($ui) {
 				$users[] = $ui;
 			}
