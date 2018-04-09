@@ -1,11 +1,12 @@
 <?php
+
 namespace Concrete\Package\MultiUserSelectorAttribute;
 
-use Concrete\Core\Package\Package;
 use Concrete\Core\Attribute\Key\Category as AttributeKeyCategory;
 use Concrete\Core\Attribute\Type as AttributeType;
+use Concrete\Core\Package\Package;
 
-class Controller extends Package
+class controller extends Package
 {
     protected $pkgHandle = 'multi_user_selector_attribute';
     protected $appVersionRequired = '8.0';
