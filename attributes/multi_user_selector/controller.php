@@ -208,7 +208,6 @@ class controller extends CoreController
 		$(function() {
 			$("#ccmUserSelect' . $id . ' .ccm-user-select-item").dialog();
 			$("a.ccm-user-list-clear").click(function() {
-			    console.log(\'clear clicked\');
 				$(this).parents(\'tr\').remove();
 			});
 
