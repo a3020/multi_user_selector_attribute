@@ -1,5 +1,5 @@
 # Multiple user selector attribute type 
 
 Requirements: 
-- concrete5 8+
-- PHP 5.6+
+- concrete5 9+
+- PHP 7.4+

@@ -4,8 +4,6 @@ namespace Concrete\Package\MultiUserSelectorAttribute\Attribute\MultiUserSelecto
 
 use Concrete\Core\Attribute\Controller as CoreController;
 use Concrete\Core\Support\Facade\UserInfo;
-use Database;
-use Core;
 
 class controller extends CoreController
 {
@@ -19,7 +17,7 @@ class controller extends CoreController
             return null;
         }
 
-        $db = Database::connection();
+        $db = $this->app->make('database')->connection();
         $value = $db->fetchColumn("SELECT value FROM atMultiUserSelector WHERE avID = ?", [
             $this->attributeValue->getAttributeValueID(),
         ]);
@@ -91,7 +89,7 @@ class controller extends CoreController
     {
         $value = $this->request($this->field('value'));
         $values = explode(',', $value);
-        $db = Database::get();
+        $db = $this->app->make('database')->connection();
         $tbl = $this->attributeKey->getIndexedSearchTable();
 
         $i = 0;
@@ -136,7 +134,7 @@ class controller extends CoreController
             return;
         }
 
-        $db = Database::connection();
+        $db = $this->app->make('database')->connection();
 
         if (is_array($value)) {
             $value = implode(',', $value);
@@ -154,13 +152,12 @@ class controller extends CoreController
 
 	public function saveKey($data)
 	{
-		$db = Database::connection();
 		$ak = $this->getAttributeKey();
 	}
 
 	public function deleteKey()
 	{
-		$db = Database::connection();
+		$db = $this->app->make('database')->connection();
 		foreach ($this->attributeKey->getAttributeValueIDList() as $id) {
 			$db->query("DELETE FROM atMultiUserSelector WHERE avID = ?", [
 				$id
@@ -170,7 +167,8 @@ class controller extends CoreController
 
 	public function saveForm($data)
 	{
-		$this->saveValue($data['value']);
+        $value = isset($data['value']) ? $data['value'] : [];
+		$this->saveValue($value);
 	}
 
 	public function deleteValue()
@@ -179,7 +177,7 @@ class controller extends CoreController
             return null;
         }
 
-        $db = Database::connection();
+        $db = $this->app->make('database')->connection();
 		$db->query("DELETE FROM atMultiUserSelector where avID = ?", [
 			$this->getAttributeValueID()
 		]);
@@ -210,28 +208,34 @@ class controller extends CoreController
 		$(function() {
 			$("#ccmUserSelect' . $id . ' .ccm-user-select-item").dialog();
 			$("a.ccm-user-list-clear").click(function() {
+			    console.log(\'clear clicked\');
 				$(this).parents(\'tr\').remove();
 			});
 
 			$("#ccmUserSelect' . $id . ' .ccm-user-select-item").on(\'click\', function() {
-				ConcreteEvent.subscribe(\'UserSearchDialogSelectUser\', function(e, data) {
-					var uID = data.uID, uName = data.uName, uEmail = data.uEmail;
-					e.stopPropagation();
-					$("tr.ccm-user-selected-item-none").hide();
-					if ($("#ccmUserSelect' . $id . '_" + uID).length < 1) {
-						var html = "";
-						html += "<tr id=\"ccmUserSelect' . $id . '_" + uID + "\" class=\"ccm-list-record\"><td><input type=\"hidden\" name=\"' . $fieldName . '[]\" value=\"" + uID + "\" />" + uName + "</td>";
-						html += "<td>" + uEmail + "</td>";
-						html += "<td><a href=\"javascript:void(0)\" class=\"ccm-user-list-clear icon-link\"><i class=\"fa fa-minus-circle ccm-user-list-clear-button\" /></a>";
-						html += "</tr>";
-						$("#ccmUserSelect' . $id . '_body").append(html);
-					}
+				ConcreteEvent.subscribe(\'UserSearchDialogSelectUser.core\', function(e, data) {
+				    jQuery.fn.dialog.closeTop();
+				    ConcreteEvent.unbind(e);
+				    
+			        if (data.users) {
+                        data.users.forEach(function(user) {                        
+                            var uID = user.id, uName = user.name, uEmail = user.email;
+                            e.stopPropagation();
+                            $("tr.ccm-user-selected-item-none").hide();
+                            if ($("#ccmUserSelect' . $id . '_" + uID).length < 1) {
+                                var html = "";
+                                html += "<tr id=\"ccmUserSelect' . $id . '_" + uID + "\" class=\"ccm-list-record\"><td><input type=\"hidden\" name=\"' . $fieldName . '[]\" value=\"" + uID + "\" />" + uName + "</td>";
+                                html += "<td>" + uEmail + "</td>";
+                                html += "<td><a href=\"javascript:void(0)\" class=\"ccm-user-list-clear icon-link\"><i class=\"fa fa-minus-circle ccm-user-list-clear-button\" /></a>";
+                                html += "</tr>";
+                                $("#ccmUserSelect' . $id . '_body").append(html);
+                            }
+                        });
+                    }
+                    
 					$("a.ccm-user-list-clear").click(function() {
 						$(this).parents(\'tr\').remove();
 					});
-				});
-				ConcreteEvent.subscribe(\'UserSearchDialogAfterSelectUser\', function(e) {
-					jQuery.fn.dialog.closeTop();
 				});
 			});
 		});
