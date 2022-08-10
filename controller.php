@@ -9,8 +9,8 @@ use Concrete\Core\Package\Package;
 class controller extends Package
 {
     protected $pkgHandle = 'multi_user_selector_attribute';
-    protected $appVersionRequired = '8.0';
-    protected $pkgVersion = '0.9.1';
+    protected $appVersionRequired = '9.0';
+    protected $pkgVersion = '2.0.0';
 
     public function getPackageName()
     {
